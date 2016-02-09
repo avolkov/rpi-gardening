@@ -59,7 +59,7 @@ potentiometer_adc = 0
 last_read = 0       # this keeps track of the last potentiometer value
 tolerance = 5       # to keep from being jittery we'll only change
 
-while True:
+while range(0, 30):
         # we'll assume that the pot didn't move
         trim_pot_changed = False
 
@@ -87,3 +87,5 @@ while True:
 
         # hang out and do nothing for a half second
         time.sleep(0.5)
+
+GPIO.clenup()

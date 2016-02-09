@@ -3,6 +3,7 @@ import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
 DEBUG = 1
+POWER_PIN = 21
 
 
 # read SPI data from MCP3008 chip, 8 possible adc's (0 thru 7)
@@ -40,50 +41,39 @@ def readadc(adcnum, clockpin, mosipin, misopin, cspin):
         adcout >>= 1       # first bit is 'null' so drop it
         return adcout
 
-# change these as desired - they're the pins connected from the
-# SPI port on the ADC to the Cobbler
-SPICLK = 18
-SPIMISO = 23
-SPIMOSI = 24
-SPICS = 25
 
-# set up the SPI interface pins
-GPIO.setup(SPIMOSI, GPIO.OUT)
-GPIO.setup(SPIMISO, GPIO.IN)
-GPIO.setup(SPICLK, GPIO.OUT)
-GPIO.setup(SPICS, GPIO.OUT)
+def spi_readout():
+    SPICLK = 18
+    SPIMISO = 23
+    SPIMOSI = 24
+    SPICS = 25
 
-# 10k trim pot connected to adc #0
-potentiometer_adc = 0
+    # set up the SPI interface pins
+    GPIO.setup(SPIMOSI, GPIO.OUT)
+    GPIO.setup(SPIMISO, GPIO.IN)
+    GPIO.setup(SPICLK, GPIO.OUT)
+    GPIO.setup(SPICS, GPIO.OUT)
 
-last_read = 0       # this keeps track of the last potentiometer value
-tolerance = 5       # to keep from being jittery we'll only change
+    # 10k trim pot connected to adc #0
+    potentiometer_adc = 0
 
-while True:
-        # we'll assume that the pot didn't move
-        trim_pot_changed = False
+    # read the analog pin
+    return readadc(potentiometer_adc, SPICLK, SPIMOSI, SPIMISO, SPICS)
 
-        # read the analog pin
-        trim_pot = readadc(potentiometer_adc, SPICLK, SPIMOSI, SPIMISO, SPICS)
-        # how much has it changed since the last read?
-        pot_adjust = abs(trim_pot - last_read)
 
-        if DEBUG:
-                print "trim_pot:", trim_pot
-                print "pot_adjust:", pot_adjust
-                print "last_read", last_read
+def power_on():
+    GPIO.setup(POWER_PIN, GPIO.OUT)
+    GPIO.output(POWER_PIN, True)
 
-        if (pot_adjust > tolerance):
-            trim_pot_changed = True
 
-        if DEBUG:
-                print "trim_pot_changed", trim_pot_changed
+def power_off():
+    GPIO.output(POWER_PIN, False)
 
-        if (trim_pot_changed):
 
-            print "Potentiometer value: ",
-            print trim_pot  # 0-1024
-            last_read = trim_pot
-
-        # hang out and do nothing for a half second
-        time.sleep(0.5)
+if __name__ == "__main__":
+    power_on()
+    time.sleep(1)
+    print("Hygrometer value %d" % spi_readout())
+    time.sleep(1)
+    power_off()
+    GPIO.cleanup()

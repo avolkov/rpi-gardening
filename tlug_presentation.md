@@ -82,6 +82,8 @@ Reboot the pi.
 # The code
 
 Adopted from -- https://gist.github.com/ladyada/3151375
+
+
 [mcp3008.py](mcp3008.py)
 
 
@@ -98,3 +100,14 @@ Potentiometer readings:
 
 
 Screw adjuster trigger point for digital reading does not affect the sensitivity of analog readings. However, once inserted the readings gradually decreased from initial 560 to 517 a few minutes later.
+
+# Controlling 5V rail with PN2222A Transistor
+
+
+![pn2222a.png](pn222a.png)
+
+**Collector** -- Input Voltage
+
+**Base** -- Control current
+
+**Emitter** -- Output Voltage

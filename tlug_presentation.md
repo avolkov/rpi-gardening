@@ -213,3 +213,5 @@ light_level = (float(spi_readout(LIGHT))/1024.0) * 100.0
 ```
 
 See [Analogue Sensors On The Raspberry Pi Using An MCP3008](http://www.raspberrypi-spy.co.uk/2013/10/analogue-sensors-on-the-raspberry-pi-using-an-mcp3008/)
+
+See [Using a photocell](https://learn.adafruit.com/photocells/using-a-photocell)

@@ -151,3 +151,46 @@ if __name__ == "__main__":
     power_off()
     GPIO.cleanup()
 ```
+
+# Temperature sensor
+
+Connection scheme:
+
+**Collector** -- 3.3 V
+
+**Base** -- Analog readout (to MCP3008 Pin #2)
+
+**Emitter** -- Ground
+
+```python
+
+def adc_to_temp(readout):
+    millivolts = readout * (3300.0 / 1024.0)
+    temp_c = ((millivolts - 100.0) / 10.0) - 40.0
+    return temp_c
+...
+
+print("Temp sensor: %d" % temp)
+```
+See [adafruit-cosm-temp.py](https://gist.github.com/petervizi/4658805)
+See [Connecting the Cobbler to the MCP3008 and TMP36](https://learn.adafruit.com/send-raspberry-pi-data-to-cosm/connecting-the-cobbler-slash-mcp3008-slash-tmp36)
+
+
+# A better way of controlling MCP3008
+
+Using gpiozero library
+
+    # apt-get install python-gpiozero
+
+Reading MCP3008 output with GPIOZERO
+
+```python
+
+from gpiozero import MCP3008
+
+temp = MCP3008(channel=1, device=0)
+temp_c = (temp.value * 3.3 - 0.5) * 100
+print("Temperature ", temp_c, " C")
+```
+
+See [MCP3008 demo with RasPIO Pro Hat GPIO Zero](https://www.youtube.com/watch?v=m0_o-q8dvnM)

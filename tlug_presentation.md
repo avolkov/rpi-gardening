@@ -173,8 +173,11 @@ def adc_to_temp(readout):
 print("Temp sensor: %d" % temp)
 ```
 See [adafruit-cosm-temp.py](https://gist.github.com/petervizi/4658805)
+
 See [Connecting the Cobbler to the MCP3008 and TMP36](https://learn.adafruit.com/send-raspberry-pi-data-to-cosm/connecting-the-cobbler-slash-mcp3008-slash-tmp36)
 
+
+Unlike software, hardware is really messy, so if you don't want to get interesting values such as -46.2C at room temperature, never, ever connect ADC chip and temperature sensor to the same 3.3V rail.
 
 # A better way of controlling MCP3008
 
@@ -194,3 +197,19 @@ print("Temperature ", temp_c, " C")
 ```
 
 See [MCP3008 demo with RasPIO Pro Hat GPIO Zero](https://www.youtube.com/watch?v=m0_o-q8dvnM)
+
+
+# Photo resitor
+
+Wiring diagram
+
+![photo resitor](photo_resistor.png)
+
+
+```python
+
+light_level = (float(spi_readout(LIGHT))/1024.0) * 100.0
+
+```
+
+See [Analogue Sensors On The Raspberry Pi Using An MCP3008](http://www.raspberrypi-spy.co.uk/2013/10/analogue-sensors-on-the-raspberry-pi-using-an-mcp3008/)

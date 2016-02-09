@@ -135,6 +135,27 @@ Reboot the pi.
 
 --
 
+### Setting up pins
+
+```python
+def spi_readout():
+    SPICLK = 18
+    SPIMISO = 23
+    SPIMOSI = 24
+    SPICS = 25
+
+    # set up the SPI interface pins
+    GPIO.setup(SPIMOSI, GPIO.OUT)
+    GPIO.setup(SPIMISO, GPIO.IN)
+    GPIO.setup(SPICLK, GPIO.OUT)
+    GPIO.setup(SPICS, GPIO.OUT)
+
+
+    return readadc(potentiometer_adc, SPICLK, SPIMOSI, SPIMISO, SPICS)
+```
+
+--
+
 ### Analog readings
 
 Potentiometer readings:
@@ -167,3 +188,110 @@ Screw adjuster trigger point for digital reading does not affect the sensitivity
 **Emitter** -- Output Voltage
 
 --
+
+### Controlling transistor
+
+```python
+
+def power_on():
+    GPIO.setup(POWER_PIN, GPIO.OUT)
+    GPIO.output(POWER_PIN, True)
+
+
+def power_off():
+    GPIO.output(POWER_PIN, False)
+
+if __name__ == "__main__":
+    power_on()
+    time.sleep(1)
+    print("Hygrometer value %d" % spi_readout())
+    time.sleep(1)
+    power_off()
+    GPIO.cleanup()
+```
+
+--
+
+### Temperature sensor
+
+Connection scheme:
+
+**Collector** -- 3.3 V
+
+**Base** -- Analog readout (to MCP3008 Pin #2)
+
+**Emitter** -- Ground
+
+--
+
+### Temperature converting millivolts to C
+
+```python
+
+def adc_to_temp(readout):
+    millivolts = readout * (3300.0 / 1024.0)
+    temp_c = ((millivolts - 100.0) / 10.0) - 40.0
+    return temp_c
+```
+
+--
+
+### A better way of controlling MCP3008 -- GPIOZERO
+
+Using gpiozero library
+
+    # apt-get install python-gpiozero
+
+Reading MCP3008 output with GPIOZERO
+
+--
+
+### gipozero code
+
+```python
+
+from gpiozero import MCP3008
+
+temp = MCP3008(channel=1, device=0)
+temp_c = (temp.value * 3.3 - 0.5) * 100
+print("Temperature ", temp_c, " C")
+```
+
+--
+
+### Photo resitor
+
+Wiring diagram
+
+![photo resitor](photo_resistor.png)
+
+--
+
+### Photoresistor code
+
+```python
+
+light_level = (float(spi_readout(LIGHT))/1024.0) * 100.0
+
+```
+
+--
+
+### Honorable mention -- ESP8266
+
+The ESP8266 WiFi Module is a self contained SOC with integrated TCP/IP protocol stack that can give any microcontroller access to your WiFi network
+
+Adafruit HUZZAH ESP8266 Breakout -- $10 US
+
+
+--
+
+![esp8266](esp8266.jpg)
+
+--
+
+### MicroPython
+
+MicroPython Firmware on kickstarter -- https://www.kickstarter.com/projects/214379695/micropython-on-the-esp8266-beautifully-easy-iot
+
+ Python programming language with standard API for ubiquitous ESP8266 WiFi chip, optimised and well supported.

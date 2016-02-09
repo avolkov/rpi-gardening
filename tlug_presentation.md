@@ -67,7 +67,34 @@ Controller Pins
 |GND  | GND  |
 |VCC  | 5V |
 
+# Enable  SPI
+
+Run `raspi-config`
+
+Advanced Options -> SPI
+
+Would you like the SPI interface to be enabled? `Yes`
+
+Would you like the SPI kernel module to be loaded by  default? `Yes`
+
+Reboot the pi.
+
 # The code
 
-
 Adopted from -- https://gist.github.com/ladyada/3151375
+[mcp3008.py](mcp3008.py)
+
+
+# Hygrometer readings
+
+Potentiometer readings:
+
+|Connection Type | Reading |
+|----------------|---------|
+|Air             | 1023    |
+|Water           | 520-580 |
+|Shorted Pins    | 40      |
+|Soil watered 1 day ago| 520-560|
+
+
+Screw adjuster trigger point for digital reading does not affect the sensitivity of analog readings. However, once inserted the readings gradually decreased from initial 560 to 517 a few minutes later.

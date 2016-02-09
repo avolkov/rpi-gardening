@@ -215,3 +215,16 @@ light_level = (float(spi_readout(LIGHT))/1024.0) * 100.0
 See [Analogue Sensors On The Raspberry Pi Using An MCP3008](http://www.raspberrypi-spy.co.uk/2013/10/analogue-sensors-on-the-raspberry-pi-using-an-mcp3008/)
 
 See [Using a photocell](https://learn.adafruit.com/photocells/using-a-photocell)
+
+
+#ESP8266
+
+The ESP8266 WiFi Module is a self contained SOC with integrated TCP/IP protocol stack that can give any microcontroller access to your WiFi network
+
+Adafruit HUZZAH ESP8266 Breakout -- $10 US
+
+![esp8266](esp8266.jpg)
+
+MicroPython Firmware on kickstarter -- https://www.kickstarter.com/projects/214379695/micropython-on-the-esp8266-beautifully-easy-iot
+
+ Python programming language with standard API for ubiquitous ESP8266 WiFi chip, optimised and well supported.
